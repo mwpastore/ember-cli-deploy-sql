@@ -1,0 +1,44 @@
+{
+  "name": "ember-cli-deploy-sql",
+  "version": "1.0.0-beta.1",
+  "description": "Deploy your Ember.js index to a SQL database",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/eslint index.js tests/**/*.js && node tests/runner.js"
+  },
+  "repository": "https://github.com/mwpastore/ember-cli-deploy-sql",
+  "engines": {
+    "node": ">= 4"
+  },
+  "author": "Mike Pastore <mike@oobak.org>",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "~3.5.0",
+    "ember-cli-deploy-plugin": "^0.2.9",
+    "knex": "~0.12.9"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "ember-cli": "beta",
+    "eslint": "^3.18.0",
+    "glob": "^7.1.1",
+    "mocha": "^3.2.0",
+    "rewire": "^2.5.2",
+    "sqlite3": "^3.1.8"
+  },
+  "keywords": [
+    "ember-addon",
+    "ember-cli-deploy-plugin",
+    "mysql",
+    "mariadb",
+    "postgres",
+    "sqlite3",
+    "oracle",
+    "mssql",
+    "knex"
+  ]
+}

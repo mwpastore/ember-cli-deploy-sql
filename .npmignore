@@ -1,0 +1,13 @@
+node_modules
+tmp
+dist
+
+npm-debug.log
+yarn-error.log
+
+.editorconfig
+.ember-cli
+.npmignore
+.travis.yml
+.watchmanconfig
+**/.gitkeep
