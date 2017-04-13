@@ -212,7 +212,9 @@ describe('DeployClient private methods', function() {
         { key: 'first', value: 'foo', created_at: 1 }
       ];
 
-      const revisionKeys = revisionList.map(_ref => ({ revision: _ref.key }));
+      const revisionKeys = revisionList.map(revision => ({
+        revision: revision.key
+      }));
 
       return knex('test').insert(revisionList)
         .then(() => trimRevisions.call({ knex, maxRecentUploads: 2 }, 'test', revisionKeys))
@@ -239,9 +241,9 @@ describe('DeployClient private methods', function() {
         { key: 'first', value: 'foo', created_at: 1, is_active: true }
       ];
 
-      const revisionKeys = revisionList.map(_ref => ({
-        revision: _ref.key,
-        active: _ref.is_active
+      const revisionKeys = revisionList.map(revision => ({
+        revision: revision.key,
+        active: revision.is_active
       }));
 
       return knex('test').insert(revisionList)
@@ -260,7 +262,9 @@ describe('DeployClient private methods', function() {
         { key: 'third', value: 'qux', created_at: 3 }
       ];
 
-      const revisionKeys = revisionList.map(_ref => ({ revision: _ref.key }));
+      const revisionKeys = revisionList.map(revision => ({
+        revision: revision.key
+      }));
 
       return knex('test').insert(revisionList)
         .then(() => trimRevisions.call({ knex, maxRecentUploads: 3 }, 'test', revisionKeys))

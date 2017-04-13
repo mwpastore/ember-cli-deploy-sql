@@ -18,11 +18,12 @@ describe('DeployPlugin | upload hook', function() {
   let capturedValue;
 
   const mockClient = () => ({
-    upload(_ref) {
+    upload(args) {
+      // TODO: replace lets with destructured args
       let
-        tableName = _ref.tableName,
-        revisionKey = _ref.revisionKey,
-        value = _ref.value;
+        tableName = args.tableName,
+        revisionKey = args.revisionKey,
+        value = args.value;
 
       capturedValue = value;
 

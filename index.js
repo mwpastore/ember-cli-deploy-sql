@@ -37,8 +37,9 @@ const DeployPlugin = DeployPluginBase.extend({
 
     connection: {},
 
-    deployClient: (_ref, pluginHelper) => {
-      const tunnel = _ref.tunnel;
+    deployClient: (context, pluginHelper) => {
+      // TODO: replace let with destructured context
+      let tunnel = context.tunnel;
 
       const
         client = pluginHelper.readConfig('client'),
@@ -55,13 +56,14 @@ const DeployPlugin = DeployPluginBase.extend({
       return new DeployClient({ client, connection, options, allowOverwrite, maxRecentUploads });
     },
 
-    didDeployMessage: _ref => {
-      _ref.revisionData = _ref.revisionData || {};
+    didDeployMessage: context => {
+      // TODO: replace this statement and lets with destructured context
+      context.revisionData = context.revisionData || {};
 
-      const
-        revisionKey = _ref.revisionData.revisionKey,
-        activatedRevisionKey = _ref.revisionData.activatedRevisionKey,
-        deployTarget = _ref.deployTarget;
+      let
+        revisionKey = context.revisionData.revisionKey,
+        activatedRevisionKey = context.revisionData.activatedRevisionKey,
+        deployTarget = context.deployTarget;
 
       if (revisionKey && !activatedRevisionKey) {
         return `Deployed but did not activate revision \`${revisionKey}'. To activate, run:\n` +
@@ -69,26 +71,27 @@ const DeployPlugin = DeployPluginBase.extend({
       }
     },
 
-    distDir: _ref => _ref.distDir,
+    distDir: context => context.distDir,
 
     filePattern: 'index.html',
 
     maxRecentUploads: 10,
 
-    revisionKey: _ref => {
-      _ref.commandOptions = _ref.commandOptions || {};
-      _ref.revisionData = _ref.revisionData || {};
+    revisionKey: context => {
+      // TODO: replace these statements and lets with destructured context
+      context.commandOptions = context.commandOptions || {};
+      context.revisionData = context.revisionData || {};
 
-      const
-        commandRevisionKey = _ref.commandOptions.revision,
-        contextRevisionKey = _ref.revisionData.revisionKey;
+      let
+        commandRevisionKey = context.commandOptions.revision,
+        contextRevisionKey = context.revisionData.revisionKey;
 
       return commandRevisionKey || contextRevisionKey;
     },
 
     sqlOptions: {},
 
-    tableName: _ref => `${_ref.project.name().replace(/-/g, '_')}_bootstrap`
+    tableName: context => `${context.project.name().replace(/-/g, '_')}_bootstrap`
   },
 
   requiredConfig: ['client'],
@@ -122,10 +125,11 @@ const DeployPlugin = DeployPluginBase.extend({
 
     return readFile(filePath, 'utf8')
       .then(value => deployClient.upload({ tableName, revisionKey, value }))
-      .then(_ref => {
-        const
-          tableName = _ref.tableName,
-          revisionKey = _ref.revisionKey;
+      .then(args => {
+        // TODO: replace lets with destructured args
+        let
+          tableName = args.tableName,
+          revisionKey = args.revisionKey;
 
         this.log(`Uploaded to table \`${tableName}' with key \`${revisionKey}'`, { verbose: true });
 
