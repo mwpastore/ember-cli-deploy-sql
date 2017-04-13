@@ -16,7 +16,8 @@ from S3 and the index.html file will be served alongside your API from a
 key-value store of some kind; in this case, a database table. However, it can
 be used to upload the contents of any file.
 
-This plugin supercedes [ember-cli-deploy-mysql][9], which is now deprecated.
+This plugin is a candidate to replace both [ember-cli-deploy-mysql][9] and
+[ember-cli-deploy-postgres][10].
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -334,7 +335,7 @@ ENV = {
 
 ## Migrating from ember-cli-deploy-mysql
 
-1. Remove ember-cli-deploy-mysql from your project:
+1. Remove [ember-cli-deploy-mysql][9] from your project:
 
     ```sh
     $ yarn remove ember-cli-deploy-mysql
@@ -431,7 +432,7 @@ open an issue report if you hit any snags!
 
 ## Migrating from ember-cli-deploy-postgres
 
-1. Remove ember-cli-deploy-postgres from your project:
+1. Remove [ember-cli-deploy-postgres][10] from your project:
 
     ```sh
     $ yarn remove ember-cli-deploy-postgres
@@ -547,3 +548,4 @@ CLI's typical `ember test` processes.
 [7]: https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel
 [8]: https://github.com/ember-cli-deploy/ember-cli-deploy-redis
 [9]: https://github.com/mwpastore/ember-cli-deploy-mysql
+[10]: https://github.com/weskinner/ember-cli-deploy-postgres
