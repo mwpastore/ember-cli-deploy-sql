@@ -3,6 +3,7 @@
 [![npm version](https://badge.fury.io/js/ember-cli-deploy-sql.svg)](https://badge.fury.io/js/ember-cli-deploy-sql)
 [![ember-cli-deploy](https://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/plugins/ember-cli-deploy-sql.svg)](http://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/)
 [![build status](https://travis-ci.org/mwpastore/ember-cli-deploy-sql.svg?branch=master)](https://travis-ci.org/mwpastore/ember-cli-deploy-sql)
+[![code coverage](https://coveralls.io/repos/mwpastore/ember-cli-deploy-sql/badge.svg?branch=master)](https://coveralls.io/r/mwpastore/ember-cli-deploy-sql?branch=master)
 
 This plugin, lovingly cribbed from [ember-cli-deploy-redis][8], uploads the
 contents of a file, presumably index.html, to a specified database table.

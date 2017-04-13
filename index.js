@@ -47,11 +47,9 @@ const DeployPlugin = DeployPluginBase.extend({
         allowOverwrite = pluginHelper.readConfig('allowOverwrite'),
         maxRecentUploads = pluginHelper.readConfig('maxRecentUploads');
 
-      if (!(connection.port || connection.socketPath)) {
-        if (tunnel && tunnel.srcPort) {
-          connection.host = connection.host || 'localhost';
-          connection.port = tunnel.srcPort;
-        }
+      if (!(connection.port || connection.socketPath) && tunnel && tunnel.srcPort) {
+        connection.host = connection.host || 'localhost';
+        connection.port = tunnel.srcPort;
       }
 
       return new DeployClient({ client, connection, options, allowOverwrite, maxRecentUploads });

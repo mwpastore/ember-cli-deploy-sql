@@ -7,7 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "./node_modules/.bin/eslint index.js tests/**/*.js && node tests/runner.js"
+    "coveralls": "./node_modules/.bin/coveralls < ./coverage/lcov.info",
+    "test": "./node_modules/.bin/eslint index.js tests/**/*.js && ./node_modules/.bin/istanbul cover tests/runner.js"
   },
   "repository": "https://github.com/mwpastore/ember-cli-deploy-sql",
   "engines": {
@@ -23,9 +24,11 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
+    "coveralls": "~2.13.0",
     "ember-cli": "~2.13.0-beta.3",
     "eslint": "^3.18.0",
     "glob": "^7.1.1",
+    "istanbul": "~0.4.5",
     "mocha": "^3.2.0",
     "rewire": "^2.5.2",
     "sqlite3": "~3.1.8"
