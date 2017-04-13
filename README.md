@@ -4,21 +4,23 @@
 [![ember-cli-deploy](https://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/plugins/ember-cli-deploy-sql.svg)](http://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/)
 [![build status](https://travis-ci.org/mwpastore/ember-cli-deploy-sql.svg?branch=master)](https://travis-ci.org/mwpastore/ember-cli-deploy-sql)
 
-This plugin, lovingly cribbed from [ember-cli-deploy-redis][8] (superceding
-[ember-cli-deploy-mysql][9]), uploads the contents of a file, presumably
-index.html, to a specified database table.  PostgreSQL, MySQL/MariaDB, Oracle,
-and other relational database management systems (RDBMS) are supported.
+This plugin, lovingly cribbed from [ember-cli-deploy-redis][8], uploads the
+contents of a file, presumably index.html, to a specified database table.
+PostgreSQL, MySQL/MariaDB, Oracle, and other relational database management
+systems (RDBMS) are supported.
 
 More often than not this plugin will be used in conjunction with the [lightning
 method of deployment][1] where the Ember.js application assets will be served
 from S3 and the index.html file will be served alongside your API from a
-key-value store of some kind; in this case, a database table.  However, it can
+key-value store of some kind; in this case, a database table. However, it can
 be used to upload the contents of any file.
+
+This plugin supercedes [ember-cli-deploy-mysql][9], which is now deprecated.
 
 ## What is an Ember CLI Deploy plugin?
 
 A plugin is an addon that can be executed as a part of the Ember CLI Deploy
-pipeline.  A plugin will implement one or more of the Ember CLI Deploy's
+pipeline. A plugin will implement one or more of the Ember CLI Deploy's
 pipeline hooks.
 
 For more information on what plugins are and how they work, please refer to the
@@ -26,17 +28,17 @@ For more information on what plugins are and how they work, please refer to the
 
 ## Why would I use this instead of ember-cli-deploy-redis?
 
-That's a great question.  Redis is a more natural fit for this kind of problem
-and you can do neat things like serve directly from NGINX.  Databases, on the
-other hand, aren't typically set up well for key-value storage and retrieval,
-and it ends up being a somewhat clumsy solution.
+That's a great question. Redis is a more natural fit for this kind of problem
+and you can do neat things like serve directly from NGINX. Databases, on the
+other hand, aren't traditionally set up well for key-value storage and
+retrieval, and it ends up being a somewhat clumsy solution.
 
 In our case, we were only using Redis for this particular function, so it
 seemed overkill to be running the service (and maintaining a connection pool to
-it in our Ruby application).  Also, our API responses (including the Ember.js
+it in our Ruby application). Also, our API responses (including the Ember.js
 index) are already being cached (thanks to a reverse proxy), so talk about
 redundant layers!  It makes more sense for us, for now, to serve the index from
-a database and let our reverse proxy cache it.  Perhaps your situation is
+a database table and let our reverse proxy cache it. Perhaps your situation is
 similar?
 
 ## Quick Start
@@ -103,9 +105,9 @@ the [Plugin Documentation][2].
 
 ### sqlOptions
 
-These options are assembled and passed to [Knex.js][3].  Knex is used as a
-query builder and database abstraction layer (DAL).  Please see its
-documentation for more information on these options.  N.B.:
+These options are assembled and passed to [Knex.js][3]. Knex is used as a
+query builder and database abstraction layer (DAL). Please see its
+documentation for more information on these options. N.B.:
 
 * If a tunnel is present (see below), its port (and host `localhost` unless
   otherwise specified) will be automatically added to the `connection` object.
@@ -120,12 +122,13 @@ A file matching this pattern will be uploaded to the database table.
 
 ### tableName
 
-The name of the table to be used to store the revision keys and file contents
-in the database.  By default this option will use the `project.name()` property
-from the deployment context.
+The name of the database table in which to store the revision keys and file
+contents. By default this option will use the `project.name()` property from
+the deployment context.
 
 The table is created in your database automatically on the initial deploy, so
-your database user will need create table privileges, at least temporarily!
+your database user will need `CREATE TABLE` privileges&mdash;at least
+temporarily!
 
 The table looks something like this (e.g. in MySQL):
 
@@ -140,7 +143,7 @@ The table looks something like this (e.g. in MySQL):
 | is_active   | tinyint(1)   | NO   |     | 0                 |                |
 | created_at  | timestamp    | NO   |     | CURRENT_TIMESTAMP |                |
 
-*Default:* `context.project.name().replace(/-/g, '_') + '_bootstrap'`
+*Default:* `${projectNameSnakeCased}_bootstrap`
 
 ### allowOverwrite
 
@@ -176,13 +179,13 @@ object:
 
 ## Activation
 
-As well as uploading a file to a database, *ember-cli-deploy-sql* has the
-ability to mark a revision of a deployed file as currently active.
+As well as uploading a file to the database table, *ember-cli-deploy-sql* has
+the ability to mark any revision of a deployed file as currently active.
 
 The application could be configured to return any existing revision of the
-index.html file as requested by a query parameter.  However, the revision
+`index.html` file as requested by a query parameter. However, the revision
 marked as the currently active revision would be returned if no query parameter
-is present.  For more detailed information on this method of deployment please
+is present. For more detailed information on this method of deployment please
 refer to the [ember-cli-deploy-lightning-pack README][1].
 
 ### How do I activate a revision?
@@ -217,7 +220,7 @@ A user can activate a revision by either:
 When *ember-cli-deploy-sql* uploads a file, it uploads it to the table defined
 by the `tableName` config property (which may be derived from the project name,
 with a key defined by the `revisionKey` config property (which may be derived
-from the file contents).  So if there have been three revisons deployed (but
+from the file contents). So if there have been three revisons deployed (but
 not activated), the table might look something like this:
 
 ```sh
@@ -253,7 +256,7 @@ MariaDB [foo]> select `key`, left(`value`, 10), is_active from bar_bootstrap;
 
 ### When does activation occur?
 
-Activation occurs during the `activate` hook of the pipeline.  By default,
+Activation occurs during the `activate` hook of the pipeline. By default,
 activation is turned off and must be explicitly enabled by one of the three
 methods described above.
 
@@ -286,8 +289,8 @@ ENV = {
 ### What if my MySQL server is only accessible *from* my remote server?
 
 Sometimes you need to SSH into a server (a "bastion" host) and then run `mysql`
-or what have you from there.  This is really common if you're using RDS on AWS,
-for instance.  Ember CLI Deploy has got you covered there, too: just set your
+or what have you from there. This is really common if you're using RDS on AWS,
+for instance. Ember CLI Deploy has got you covered there, too: just set your
 SSH tunnel host to the bastion server and tell the tunnel to use your database
 server as the destination host, like so:
 
@@ -357,6 +360,8 @@ ENV = {
     ADD INDEX(`is_active`);
     ```
 
+1. Ask your team to hold off on any deployments for a bit!
+
 1. Mark the current revision as active:
 
     ```sql
@@ -381,12 +386,13 @@ ENV = {
     LIMIT 1;
     ```
 
-If push comes to shove, you can always rename or drop the table and re-deploy.
-Please open an issue report if you hit any snags!
+If push comes to shove, you can always rename or drop the table and
+re-deploy&mdash;losing your history but getting back up and running. Please
+open an issue report if you hit any snags!
 
 ## Tests
 
-* yarn test
+* `yarn test`
 
 ## Why `ember test` doesn't work
 
@@ -394,12 +400,12 @@ Since this is a node-only Ember CLI addon, we use mocha for testing and this
 package does not include many files and devDependencies which are part of Ember
 CLI's typical `ember test` processes.
 
-[1]: https://github.com/lukemelia/ember-cli-deploy-lightning-pack "ember-cli-deploy-lightning-pack"
-[2]: http://ember-cli.github.io/ember-cli-deploy/plugins "Plugin Documentation"
-[3]: http://knexjs.org "Knex.js"
-[4]: https://github.com/ember-cli-deploy/ember-cli-deploy-build "ember-cli-deploy-build"
-[5]: https://github.com/ember-cli/ember-cli-deploy "ember-cli-deploy"
-[6]: https://github.com/ember-cli-deploy/ember-cli-deploy-revision-data "ember-cli-deploy-revision-data"
-[7]: https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel "ember-cli-deploy-ssh-tunnel"
-[8]: https://github.com/ember-cli-deploy/ember-cli-deploy-redis "ember-cli-deploy-redis"
-[9]: https://github.com/mwpastore/ember-cli-deploy-mysql "ember-cli-deploy-mysql"
+[1]: https://github.com/lukemelia/ember-cli-deploy-lightning-pack
+[2]: http://ember-cli.github.io/ember-cli-deploy/plugins
+[3]: http://knexjs.org
+[4]: https://github.com/ember-cli-deploy/ember-cli-deploy-build
+[5]: https://github.com/ember-cli/ember-cli-deploy
+[6]: https://github.com/ember-cli-deploy/ember-cli-deploy-revision-data
+[7]: https://github.com/ember-cli-deploy/ember-cli-deploy-ssh-tunnel
+[8]: https://github.com/ember-cli-deploy/ember-cli-deploy-redis
+[9]: https://github.com/mwpastore/ember-cli-deploy-mysql
