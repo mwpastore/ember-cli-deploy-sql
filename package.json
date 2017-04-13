@@ -8,7 +8,8 @@
   },
   "scripts": {
     "coveralls": "./node_modules/.bin/coveralls < ./coverage/lcov.info",
-    "test": "./node_modules/.bin/eslint index.js tests/**/*.js && ./node_modules/.bin/istanbul cover tests/runner.js"
+    "test": "./node_modules/.bin/eslint index.js tests/**/*.js && ./node_modules/.bin/istanbul cover tests/runner.js",
+    "toc": "doctoc --notitle --maxlevel 2 --github README.md"
   },
   "repository": "https://github.com/mwpastore/ember-cli-deploy-sql",
   "engines": {

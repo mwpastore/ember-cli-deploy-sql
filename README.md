@@ -18,6 +18,25 @@ be used to upload the contents of any file.
 
 This plugin supercedes [ember-cli-deploy-mysql][9], which is now deprecated.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What is an Ember CLI Deploy plugin?](#what-is-an-ember-cli-deploy-plugin)
+- [Why would I use this instead of ember-cli-deploy-redis?](#why-would-i-use-this-instead-of-ember-cli-deploy-redis)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [Pipeline Hooks Implemented](#pipeline-hooks-implemented)
+- [Configuration Options](#configuration-options)
+- [Configuration Prerequisites](#configuration-prerequisites)
+- [Activation](#activation)
+- [What if my MySQL server isn't publicly accessible?](#what-if-my-mysql-server-isnt-publicly-accessible)
+- [Migrating from ember-cli-deploy-mysql](#migrating-from-ember-cli-deploy-mysql)
+- [Migrating from ember-cli-deploy-postgres](#migrating-from-ember-cli-deploy-postgres)
+- [Tests](#tests)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## What is an Ember CLI Deploy plugin?
 
 A plugin is an addon that can be executed as a part of the Ember CLI Deploy
@@ -89,7 +108,7 @@ Run the following command in your terminal:
 ember install ember-cli-deploy-sql
 ```
 
-## Ember CLI Deploy Hooks Implemented
+## Pipeline Hooks Implemented
 
 For detailed information on what plugin hooks are and how they work, please
 refer to the [Plugin Documentation][2].
@@ -166,7 +185,7 @@ The maximum number of recent revisions to keep in the MySQL table.
 
 *Default:* `10`
 
-## Prerequisites
+## Configuration Prerequisites
 
 The following properties are expected to be present on the deployment `context`
 object:
@@ -513,7 +532,7 @@ open an issue report if you hit any snags!
 
 * `yarn install && yarn test`
 
-## Why `ember test` doesn't work
+### Why `ember test` doesn't work
 
 Since this is a node-only Ember CLI addon, we use mocha for testing and this
 package does not include many files and devDependencies which are part of Ember
