@@ -346,7 +346,7 @@ ENV = {
     ```
 
 1. Update `config/deploy.js` to use the `sql` key (instead of `mysql`), and
-   adapt your connection options to Knex syntax:
+   adapt your connection options to Knex syntax. For example:
 
     Before:
 
@@ -403,6 +403,105 @@ ENV = {
     ```sql
     DELETE FROM `foo_bootstrap` -- replace with your table name
     WHERE `key` LIKE 'current'
+    LIMIT 1;
+    ```
+
+If push comes to shove, you can always rename or drop the table and
+re-deploy&mdash;losing your history but getting back up and running. Please
+open an issue report if you hit any snags!
+
+## Migrating from ember-cli-deploy-postgres
+
+1. Remove ember-cli-deploy-postgres from your project:
+
+    ```sh
+    $ yarn remove ember-cli-deploy-postgres
+    ```
+
+    Or if you're still using npm:
+
+    ```sh
+    $ npm uninstall ember-cli-deploy-postgres --save-dev
+    ```
+
+1. Add *ember-cli-deploy-sql* to your project:
+
+    ```sh
+    $ ember install ember-cli-deploy-sql
+    ```
+
+1. Add a PostgreSQL driver to your project:
+
+    ```sh
+    $ yarn add pg --dev
+    ```
+
+    Or if you're still using npm:
+
+    ```sh
+    $ npm install pg --save-dev
+    ```
+
+1. Update `config/deploy.js` to use the `sql` key (instead of `postgres`), and
+   adapt your connection options to Knex syntax. For example:
+
+    Before:
+
+    ```javascript
+    postgres: {
+      user: 'jack',
+      password: process.env.POSTGRESQL_PASSWORD,
+      database: 'momotaro'
+    }
+    ```
+
+    After:
+
+    ```javascript
+    sql: {
+      client: 'pg',
+      connection: {
+        user: 'jack',
+        password: process.env.POSTGRESQL_PASSWORD,
+        database: 'momotaro'
+      }
+    }
+    ```
+
+1. Update the schema to reflect some minor changes:
+
+    ```sql
+    ALTER TABLE "foo_bootstrap" -- replace with your table name
+    ADD COLUMN "description" VARCHAR(255),
+    ADD COLUMN "is_active" BOOLEAN NOT NULL DEFAULT FALSE;
+
+    -- replace foo_bootstrap with your table name
+    CREATE INDEX "foo_bootstrap_is_active_index" ON "foo_bootstrap" ("is_active");
+    ```
+
+1. Ask your team to hold off on any deployments for a bit!
+
+1. Mark the current revision as active:
+
+    ```sql
+    UPDATE "foo_bootstrap" -- replace with your table name
+    SET "is_active" = TRUE
+    WHERE "key" IN (
+      SELECT "value"
+      FROM "foo_bootstrap" -- replace with your table name
+      WHERE "key" LIKE 'current'
+    )
+    LIMIT 1;
+    ```
+
+1. Update your backend to serve the revision `WHERE "is_active" = TRUE`
+   (instead of the revision pointed to by the `'current'` revision).
+
+1. Remove the now-unnecessary `'current'` revision:
+
+    ```sql
+    DELETE FROM "foo_bootstrap" -- replace with your table name
+    WHERE "key" LIKE 'current'
     LIMIT 1;
     ```
 
