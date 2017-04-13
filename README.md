@@ -60,6 +60,12 @@ To get up and running quickly, do the following:
     $ yarn add <your-database-type> --dev
     ```
 
+    Or if you're still using npm:
+
+    ```sh
+    $ npm install <your-database-type> --save-dev
+    ```
+
 * Place the following configuration into `config/deploy.js`:
 
     ```javascript
@@ -110,6 +116,7 @@ These options are assembled and passed to [Knex.js][3]. Knex is used as a
 query builder and database abstraction layer (DAL). Please see its
 documentation for more information on these options. N.B.:
 
+* `connection` can be either a string or an object.
 * If a tunnel is present (see below), its port (and host `localhost` unless
   otherwise specified) will be automatically added to the `connection` object.
 * `sqlOptions` is an optional object that may include any additional top-level
@@ -314,6 +321,12 @@ ENV = {
     $ yarn remove ember-cli-deploy-mysql
     ```
 
+    Or if you're still using npm:
+
+    ```sh
+    $ npm uninstall ember-cli-deploy-mysql --save-dev
+    ```
+
 1. Add *ember-cli-deploy-sql* to your project:
 
     ```sh
@@ -324,6 +337,12 @@ ENV = {
 
     ```sh
     $ yarn add mysql --dev
+    ```
+
+    Or if you're still using npm:
+
+    ```sh
+    $ npm install mysql --save-dev
     ```
 
 1. Update `config/deploy.js` to use the `sql` key (instead of `mysql`), and
@@ -393,7 +412,7 @@ open an issue report if you hit any snags!
 
 ## Tests
 
-* `yarn test`
+* `yarn install && yarn test`
 
 ## Why `ember test` doesn't work
 
