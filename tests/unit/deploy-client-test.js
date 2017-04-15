@@ -142,6 +142,14 @@ describe('DeployClient private methods', function() {
   describe('#listRevisions()', function() {
     const listRevisions = subject.__get__('listRevisions');
 
+    it('resolves to an empty array if no table exists', function() {
+      return listRevisions.call({ knex }, 'test-not-present')
+        .then(revisions => {
+          assert.isArray(revisions);
+          assert.lengthOf(revisions, 0);
+        });
+    });
+
     it('resolves to an empty array if none', function() {
       return listRevisions.call({ knex }, 'test')
         .then(revisions => {
