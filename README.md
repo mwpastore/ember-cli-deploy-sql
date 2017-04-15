@@ -255,7 +255,7 @@ not activated), the table might look something like this:
 ```sh
 $ mysql -u root foo
 
-MariaDB [foo]> select `key`, left(`value`, 10), is_active from bar_bootstrap;
+MariaDB [foo]> select `key`, left(`value`, 10), `is_active` from bar_bootstrap;
 +----------------------------------+-------------------+-----------+
 | key                              | left(`value`, 10) | is_active |
 +----------------------------------+-------------------+-----------+
@@ -270,10 +270,10 @@ table:
 
 ```sh
 $ ember deploy:activate production --revision=cc9d9af44ad70f4a6732c1c13deb246e
-✔ Activated revision `cc9d9af44ad70f4a6732c1c13deb246e`
+✔ Activated revision `cc9d9af44ad70f4a6732c1c13deb246e'
 $ mysql -u root foo
 
-MariaDB [foo]> select `key`, left(`value`, 10), is_active from bar_bootstrap;
+MariaDB [foo]> select `key`, left(`value`, 10), `is_active` from bar_bootstrap;
 +----------------------------------+-------------------+-----------+
 | key                              | left(`value`, 10) | is_active |
 +----------------------------------+-------------------+-----------+
