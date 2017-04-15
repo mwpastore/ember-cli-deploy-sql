@@ -26,7 +26,6 @@ This plugin is a candidate to replace both [ember-cli-deploy-mysql][9] and
 - [What is an Ember CLI Deploy plugin?](#what-is-an-ember-cli-deploy-plugin)
 - [Why would I use this instead of ember-cli-deploy-redis?](#why-would-i-use-this-instead-of-ember-cli-deploy-redis)
 - [Quick Start](#quick-start)
-- [Installation](#installation)
 - [Pipeline Hooks Implemented](#pipeline-hooks-implemented)
 - [Configuration Options](#configuration-options)
 - [Configuration Prerequisites](#configuration-prerequisites)
@@ -77,13 +76,13 @@ To get up and running quickly, do the following:
 * Install the [appropriate driver](http://knexjs.org/#Installation-node):
 
     ```sh
-    $ yarn add <your-database-type> --dev
+    $ yarn add --dev <your-database-type>
     ```
 
     Or if you're still using npm:
 
     ```sh
-    $ npm install <your-database-type> --save-dev
+    $ npm install --save-dev <your-database-type>
     ```
 
 * Place the following configuration into `config/deploy.js`:
@@ -100,14 +99,6 @@ To get up and running quickly, do the following:
     ```sh
     $ ember deploy <environment>
     ```
-
-## Installation
-
-Run the following command in your terminal:
-
-```sh
-ember install ember-cli-deploy-sql
-```
 
 ## Pipeline Hooks Implemented
 
@@ -345,7 +336,7 @@ ENV = {
     Or if you're still using npm:
 
     ```sh
-    $ npm uninstall ember-cli-deploy-mysql --save-dev
+    $ npm uninstall --save-dev ember-cli-deploy-mysql
     ```
 
 1. Add *ember-cli-deploy-sql* to your project:
@@ -357,13 +348,13 @@ ENV = {
 1. Add a MySQL/MariaDB driver to your project:
 
     ```sh
-    $ yarn add mysql --dev
+    $ yarn add --dev mysql
     ```
 
     Or if you're still using npm:
 
     ```sh
-    $ npm install mysql --save-dev
+    $ npm install --save-dev mysql
     ```
 
 1. Update `config/deploy.js` to use the `sql` key (instead of `mysql`), and
@@ -442,7 +433,7 @@ open an issue report if you hit any snags!
     Or if you're still using npm:
 
     ```sh
-    $ npm uninstall ember-cli-deploy-postgres --save-dev
+    $ npm uninstall --save-dev ember-cli-deploy-postgres
     ```
 
 1. Add *ember-cli-deploy-sql* to your project:
@@ -454,13 +445,13 @@ open an issue report if you hit any snags!
 1. Add a PostgreSQL driver to your project:
 
     ```sh
-    $ yarn add pg --dev
+    $ yarn add --dev pg
     ```
 
     Or if you're still using npm:
 
     ```sh
-    $ npm install pg --save-dev
+    $ npm install --save-dev pg
     ```
 
 1. Update `config/deploy.js` to use the `sql` key (instead of `postgres`), and
