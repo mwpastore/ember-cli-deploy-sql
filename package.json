@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-deploy-sql",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.3",
   "description": "Deploy your Ember.js index to a database table",
   "directories": {
     "doc": "doc",
