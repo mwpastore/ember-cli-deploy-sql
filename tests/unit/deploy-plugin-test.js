@@ -21,6 +21,9 @@ describe('DeployPlugin', function() {
     assert.isDefined(plugin.configure);
     assert.isFunction(plugin.configure);
 
+    assert.isDefined(plugin.setup);
+    assert.isFunction(plugin.setup);
+
     assert.isDefined(plugin.fetchInitialRevisions);
     assert.isFunction(plugin.fetchInitialRevisions);
 

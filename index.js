@@ -99,6 +99,15 @@ const DeployPlugin = DeployPluginBase.extend({
   //
   // Pipeline hooks
   //
+  setup() {
+    const
+      deployClient = this.readConfig('deployClient'),
+      tableName = this.readConfig('tableName');
+
+    return deployClient.sanityCheck({ tableName })
+      .catch(errorMessage.bind(this));
+  },
+
   fetchInitialRevisions() {
     const
       deployClient = this.readConfig('deployClient'),

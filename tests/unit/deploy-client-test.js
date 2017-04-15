@@ -6,7 +6,10 @@ const assert = require('../helpers/assert');
 const rewire = require('rewire');
 const subject = rewire('../../lib/deploy-client');
 
-describe('DeployClient private "constructor" method', function() {
+describe('DeployClient private methods', function() {
+  const rewire = require('rewire');
+  const subject = rewire('../../lib/deploy-client');
+
   const knex = require('knex')({
     client: 'sqlite3',
     connection: { filename: ':memory:' },
@@ -14,51 +17,15 @@ describe('DeployClient private "constructor" method', function() {
     //debug: true
   });
 
+  beforeEach(subject.__get__('createTable').bind({ knex }, 'test'));
+  afterEach(() => knex.schema.dropTable('test'));
+
   // Tear down the connection pool after all the tests have completed.
   after(() => knex.destroy());
 
-  describe('#conditionallyCreateTable()', function() {
-    const conditionallyCreateTable = subject.__get__('conditionallyCreateTable');
-
-    it('creates a table if none exists', function() {
-      return conditionallyCreateTable.call({ knex }, 'foo')
-        .then(() => knex('foo').columnInfo())
-        .then(info => {
-          assert.isObject(info);
-
-          assert.deepPropertyVal(info, 'id.type', 'integer');
-          assert.deepPropertyVal(info, 'key.type', 'varchar');
-          assert.deepPropertyVal(info, 'value.type', 'text');
-          assert.deepPropertyVal(info, 'is_active.type', 'boolean');
-          assert.deepPropertyVal(info, 'created_at.type', 'datetime');
-        })
-        .finally(() => knex.schema.dropTable('foo'));
-    });
-
-    it('does not create a table if one exists', function() {
-      return knex.schema.createTable('bar', tbl => {
-        tbl.increments();
-        tbl.string('key').notNullable().unique();
-        tbl.timestamps();
-      }).then(() => conditionallyCreateTable.call({ knex }, 'bar'))
-        .then(() => knex('bar').columnInfo())
-        .then(info => {
-          assert.isObject(info);
-
-          assert.deepPropertyVal(info, 'id.type', 'integer');
-          assert.deepPropertyVal(info, 'key.type', 'varchar');
-          assert.deepPropertyVal(info, 'created_at.type', 'datetime');
-          assert.deepPropertyVal(info, 'updated_at.type', 'datetime');
-
-          assert.notProperty(info, 'value');
-          assert.notProperty(info, 'is_active');
-        })
-        .finally(() => knex.schema.dropTable('bar'));
-    });
-
+  describe('#createTable()', function() {
     it('sets appropriate column defaults', function() {
-      return conditionallyCreateTable.call({ knex }, 'test')
-        .then(() => knex('test').insert({ key: 'foo', value: 'bar' }))
+      return knex('test').insert({ key: 'foo', value: 'bar' })
         .then(() => knex('test').first())
         .then(row => {
           assert.isObject(row);
@@ -76,24 +43,6 @@ describe('DeployClient private "constructor" method', function() {
         });
     });
   });
-});
-
-describe('DeployClient private methods', function() {
-  const rewire = require('rewire');
-  const subject = rewire('../../lib/deploy-client');
-
-  const knex = require('knex')({
-    client: 'sqlite3',
-    connection: { filename: ':memory:' },
-    useNullAsDefault: true,
-    //debug: true
-  });
-
-  beforeEach(subject.__get__('createTable').bind({ knex }, 'test'));
-  afterEach(() => knex.schema.dropTable('test'));
-
-  // Tear down the connection pool after all the tests have completed.
-  after(() => knex.destroy());
 
   describe('#conditionallyCreateRevision()', function() {
     const createRevision = subject.__get__('conditionallyCreateRevision');
@@ -384,6 +333,46 @@ describe('DeployClient public API', function() {
     }
   });
 
+  describe('#sanityCheck()', function() {
+    it('creates a table if none exists', function() {
+      deployClient = new subject(baseOptions);
+
+      return deployClient.sanityCheck({ tableName: 'foo' })
+        .then(() => deployClient.knex('foo').columnInfo())
+        .then(info => {
+          assert.isObject(info);
+
+          assert.deepPropertyVal(info, 'id.type', 'integer');
+          assert.deepPropertyVal(info, 'key.type', 'varchar');
+          assert.deepPropertyVal(info, 'value.type', 'text');
+          assert.deepPropertyVal(info, 'is_active.type', 'boolean');
+          assert.deepPropertyVal(info, 'created_at.type', 'datetime');
+        });
+    });
+
+    it('does not create a table if one exists', function() {
+      deployClient = new subject(baseOptions);
+
+      return deployClient.knex.schema.createTable('bar', tbl => {
+        tbl.increments();
+        tbl.string('key').notNullable().unique();
+        tbl.timestamps();
+      }).then(() => deployClient.sanityCheck({ tableName: 'bar' }))
+        .then(() => deployClient.knex('bar').columnInfo())
+        .then(info => {
+          assert.isObject(info);
+
+          assert.deepPropertyVal(info, 'id.type', 'integer');
+          assert.deepPropertyVal(info, 'key.type', 'varchar');
+          assert.deepPropertyVal(info, 'created_at.type', 'datetime');
+          assert.deepPropertyVal(info, 'updated_at.type', 'datetime');
+
+          assert.notProperty(info, 'value');
+          assert.notProperty(info, 'is_active');
+        });
+    });
+  });
+
   describe('#fetchRevisions()', function() {
     it('returns successfully', function() {
       deployClient = new subject(baseOptions);
@@ -456,7 +445,8 @@ describe('DeployClient public API', function() {
     it('uploads a new revision with a payload', function() {
       deployClient = new subject(baseOptions);
 
-      return deployClient.upload({ tableName: 'foo', value: 'bar' })
+      return deployClient.sanityCheck({ tableName: 'foo' })
+        .then(() => deployClient.upload({ tableName: 'foo', value: 'bar' }))
         .then(() => deployClient.knex('foo').select('key', 'value'))
         .then(revisions => {
           assert.isArray(revisions);
@@ -473,7 +463,8 @@ describe('DeployClient public API', function() {
     it('returns the table name and revision key', function() {
       deployClient = new subject(baseOptions);
 
-      return deployClient.upload({ tableName: 'foo', value: 'bar' })
+      return deployClient.sanityCheck({ tableName: 'foo' })
+        .then(() => deployClient.upload({ tableName: 'foo', value: 'bar' }))
         .then(result => {
           assert.propertyVal(result, 'tableName', 'foo');
           assert.propertyVal(result, 'revisionKey', 'default');

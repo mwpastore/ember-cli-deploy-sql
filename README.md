@@ -118,6 +118,7 @@ refer to the [Plugin Documentation][2].
 * `didDeploy`
 * `fetchInitialRevisions`
 * `fetchRevisions`
+* `setup`
 * `upload`
 * `willActivate`
 
@@ -152,7 +153,7 @@ A file matching this pattern will be uploaded to the database table.
 
 The name of the database table in which to store the revision keys and file
 contents. By default this option will use the `project.name()` property from
-the deployment context.
+the deployment context, snake-cased and suffixed with `_bootstrap`.
 
 The table is created in your database automatically on the initial deploy, so
 your database user will need `CREATE TABLE` privileges&mdash;at least
@@ -171,7 +172,7 @@ The table looks something like this (e.g. in MySQL):
 | is_active   | tinyint(1)   | NO   |     | 0                 |                |
 | created_at  | timestamp    | NO   |     | CURRENT_TIMESTAMP |                |
 
-*Default:* `${projectNameSnakeCased}_bootstrap`
+*Default:* `${projectName}_bootstrap`
 
 ### allowOverwrite
 
