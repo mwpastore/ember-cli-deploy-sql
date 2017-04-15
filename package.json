@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "~3.5.0",
+    "ember-cli-deploy-display-revisions": "^1.0.0",
     "ember-cli-deploy-plugin": "^0.2.9",
     "knex": "~0.12.9"
   },
