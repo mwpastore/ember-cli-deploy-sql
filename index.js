@@ -44,6 +44,7 @@ const DeployPlugin = DeployPluginBase.extend({
       const
         client = pluginHelper.readConfig('client'),
         connection = pluginHelper.readConfig('connection'),
+        migrations = pluginHelper.readConfig('migrations'),
         options = pluginHelper.readConfig('sqlOptions'),
         allowOverwrite = pluginHelper.readConfig('allowOverwrite'),
         maxRecentUploads = pluginHelper.readConfig('maxRecentUploads');
@@ -53,7 +54,14 @@ const DeployPlugin = DeployPluginBase.extend({
         connection.port = tunnel.srcPort;
       }
 
-      return new DeployClient({ client, connection, options, allowOverwrite, maxRecentUploads });
+      return new DeployClient({
+        client,
+        connection,
+        migrations,
+        options,
+        allowOverwrite,
+        maxRecentUploads
+      });
     },
 
     didDeployMessage: context => {
@@ -76,6 +84,10 @@ const DeployPlugin = DeployPluginBase.extend({
     filePattern: 'index.html',
 
     maxRecentUploads: 10,
+
+    migrations: {
+      tableName: 'ember_cli_deploy_migrations'
+    },
 
     revisionKey: context => {
       // TODO: replace these statements and lets with destructured context

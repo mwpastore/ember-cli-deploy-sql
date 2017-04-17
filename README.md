@@ -122,11 +122,15 @@ the [Plugin Documentation][2].
 
 ### connection
 
+### migrations
+
+*Default:* `{ tableName: 'ember_cli_deploy_migrations' }`
+
 ### sqlOptions
 
 These options are assembled and passed to [Knex.js][3]. Knex is used as a
-query builder and database abstraction layer (DAL). Please see its
-documentation for more information on these options. N.B.:
+query builder and database abstraction layer (DAL). Please see [its
+documentation][11] for more information on these options. N.B.:
 
 * `connection` can be either a string or an object.
 * If a tunnel is present (see below), its port (and host `localhost` unless
@@ -383,44 +387,11 @@ ENV = {
     }
     ```
 
-1. Update the schema to reflect some minor changes:
-
-    ```sql
-    ALTER TABLE `foo_bootstrap` -- replace with your table name
-    ADD COLUMN `description` VARCHAR(255) AFTER `deployer`,
-    ADD COLUMN `is_active` TINYINT(1) NOT NULL DEFAULT 0 AFTER `description`,
-    ADD INDEX(`is_active`);
-    ```
-
-1. Ask your team to hold off on any deployments for a bit!
-
-1. Mark the current revision as active:
-
-    ```sql
-    SELECT @current := `value`
-    FROM `foo_bootstrap` -- replace with your table name
-    WHERE `key` LIKE 'current'
-    LIMIT 1;
-
-    UPDATE `foo_bootstrap` -- replace with your table name
-    SET `is_active` = 1
-    WHERE `key` = @current;
-    ```
-
 1. Update your backend to serve the revision `` WHERE `is_active` = 1 ``
    (instead of the revision pointed to by the `'current'` revision).
 
-1. Remove the now-unnecessary `'current'` revision:
-
-    ```sql
-    DELETE FROM `foo_bootstrap` -- replace with your table name
-    WHERE `key` LIKE 'current'
-    LIMIT 1;
-    ```
-
-If push comes to shove, you can always rename or drop the table and
-re-deploy&mdash;losing your history but getting back up and running. Please
-open an issue report if you hit any snags!
+1. Run `ember deploy:list <environment>` to migrate the database and confirm
+   that the correct revision is (still) active.
 
 ## Migrating from ember-cli-deploy-postgres
 
@@ -480,46 +451,11 @@ open an issue report if you hit any snags!
     }
     ```
 
-1. Update the schema to reflect some minor changes:
-
-    ```sql
-    ALTER TABLE "foo_bootstrap" -- replace with your table name
-    ADD COLUMN "description" VARCHAR(255),
-    ADD COLUMN "is_active" BOOLEAN NOT NULL DEFAULT FALSE;
-
-    -- replace foo_bootstrap with your table name
-    CREATE INDEX "foo_bootstrap_is_active_index" ON "foo_bootstrap" ("is_active");
-    ```
-
-1. Ask your team to hold off on any deployments for a bit!
-
-1. Mark the current revision as active:
-
-    ```sql
-    UPDATE "foo_bootstrap" -- replace with your table name
-    SET "is_active" = TRUE
-    WHERE "key" IN (
-      SELECT "value"
-      FROM "foo_bootstrap" -- replace with your table name
-      WHERE "key" LIKE 'current'
-    )
-    LIMIT 1;
-    ```
-
 1. Update your backend to serve the revision `WHERE "is_active" = TRUE`
    (instead of the revision pointed to by the `'current'` revision).
 
-1. Remove the now-unnecessary `'current'` revision:
-
-    ```sql
-    DELETE FROM "foo_bootstrap" -- replace with your table name
-    WHERE "key" LIKE 'current'
-    LIMIT 1;
-    ```
-
-If push comes to shove, you can always rename or drop the table and
-re-deploy&mdash;losing your history but getting back up and running. Please
-open an issue report if you hit any snags!
+1. Run `ember deploy:list <environment>` to migrate the database and confirm
+   that the correct revision is (still) active.
 
 ## Tests
 
@@ -541,3 +477,4 @@ CLI's typical `ember test` processes.
 [8]: https://github.com/ember-cli-deploy/ember-cli-deploy-redis
 [9]: https://github.com/mwpastore/ember-cli-deploy-mysql
 [10]: https://github.com/weskinner/ember-cli-deploy-postgres
+[11]: http://knexjs.org/#Installation-client

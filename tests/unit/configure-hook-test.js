@@ -69,6 +69,9 @@ describe('DeployPlugin | configure hook', function() {
       assert.strictEqual(instance.readConfig('allowOverwrite'), false);
       assert.strictEqual(instance.readConfig('maxRecentUploads'), 10);
       assert.deepEqual(instance.readConfig('connection'), {});
+      assert.deepEqual(instance.readConfig('migrations'), {
+        tableName: 'ember_cli_deploy_migrations'
+      });
       assert.deepEqual(instance.readConfig('sqlOptions'), {});
       assert.strictEqual(instance.readConfig('filePattern'), 'index.html');
       assert.strictEqual(instance.readConfig('tableName'), 'foo_bar_bootstrap');
@@ -105,6 +108,7 @@ describe('DeployPlugin | configure hook', function() {
     it('takes a tableName option', helper('tableName', 'barIdx'));
     it('takes an allowOverwrite option', helper('allowOverwrite', true));
     it('takes a maxRecentUploads option', helper('maxRecentUploads', 33));
+    it('takes migrations', helper('migrations', { tableName: 'ecd_migs' }));
     it('takes sqlOptions', helper('sqlOptions', { useNullAsDefault: true }));
   });
 

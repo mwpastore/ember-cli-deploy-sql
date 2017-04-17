@@ -3,6 +3,8 @@ node_modules
 tmp
 dist
 
+knexfile.js
+
 npm-debug.log
 yarn-error.log
 

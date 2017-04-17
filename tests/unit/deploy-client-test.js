@@ -356,6 +356,7 @@ describe('DeployClient public API', function() {
       return deployClient.knex.schema.createTable('bar', tbl => {
         tbl.increments();
         tbl.string('key').notNullable().unique();
+        tbl.boolean('is_active').notNullable().default(false);
         tbl.timestamps();
       }).then(() => deployClient.sanityCheck({ tableName: 'bar' }))
         .then(() => deployClient.knex('bar').columnInfo())
@@ -364,11 +365,12 @@ describe('DeployClient public API', function() {
 
           assert.deepPropertyVal(info, 'id.type', 'integer');
           assert.deepPropertyVal(info, 'key.type', 'varchar');
+          assert.deepPropertyVal(info, 'is_active.type', 'boolean');
           assert.deepPropertyVal(info, 'created_at.type', 'datetime');
           assert.deepPropertyVal(info, 'updated_at.type', 'datetime');
 
           assert.notProperty(info, 'value');
-          assert.notProperty(info, 'is_active');
+          assert.notProperty(info, 'description');
         });
     });
   });
