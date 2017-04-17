@@ -32,10 +32,11 @@ describe('DeployPlugin | activate hook', function() {
             activateRevision() {
               didActivate = true;
 
-              return Promise.resolve();
+              return Promise.resolve({
+                revisionKey: '123abc'
+              });
             }
           }),
-          revisionKey: '123abc',
           tableName: 'foo'
         }
       }
