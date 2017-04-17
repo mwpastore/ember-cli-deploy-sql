@@ -179,7 +179,10 @@ const DeployPlugin = DeployPluginBase.extend({
     this.log(`Activating revision \`${revisionKey}'`, { verbose: true });
 
     return deployClient.activateRevision({ tableName, revisionKey })
-      .then(() => {
+      .then(args => {
+        // TODO: replace let with destructured args
+        let revisionKey = args.revisionKey;
+
         this.log(`✔ Activated revision \`${revisionKey}'`);
 
         return { revisionData: { activatedRevisionKey: revisionKey } };
