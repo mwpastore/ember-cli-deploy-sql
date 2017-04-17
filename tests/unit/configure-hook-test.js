@@ -69,9 +69,7 @@ describe('DeployPlugin | configure hook', function() {
       assert.strictEqual(instance.readConfig('allowOverwrite'), false);
       assert.strictEqual(instance.readConfig('maxRecentUploads'), 10);
       assert.deepEqual(instance.readConfig('connection'), {});
-      assert.deepEqual(instance.readConfig('migrations'), {
-        tableName: 'ember_cli_deploy_migrations'
-      });
+      assert.deepEqual(instance.readConfig('migrations'), {});
       assert.deepEqual(instance.readConfig('sqlOptions'), {});
       assert.strictEqual(instance.readConfig('filePattern'), 'index.html');
       assert.strictEqual(instance.readConfig('tableName'), 'foo_bar_bootstrap');

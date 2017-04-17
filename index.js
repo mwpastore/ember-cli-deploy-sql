@@ -57,7 +57,10 @@ const DeployPlugin = DeployPluginBase.extend({
       return new DeployClient({
         client,
         connection,
-        migrations,
+        migrations: Object.assign({
+          directory: `${__dirname}/migrations`,
+          tableName: 'ember_cli_deploy_migrations'
+        }, migrations),
         options,
         allowOverwrite,
         maxRecentUploads
@@ -85,9 +88,7 @@ const DeployPlugin = DeployPluginBase.extend({
 
     maxRecentUploads: 10,
 
-    migrations: {
-      tableName: 'ember_cli_deploy_migrations'
-    },
+    migrations: {},
 
     revisionKey: context => {
       // TODO: replace these statements and lets with destructured context
