@@ -306,6 +306,13 @@ ENV = {
   'ssh-tunnel': {
     username: 'your-ssh-username',
     host: 'remote-mysql-host'
+  },
+  pipeline: {
+    runOrder: {
+      sql: {
+        after: 'ssh-tunnel'
+      }
+    }
   }
 }
 ```
@@ -320,12 +327,13 @@ server as the destination host, like so:
 
 ```js
 ENV = {
-  sql: { /* yada yada */ },
+  sql: ..,
   'ssh-tunnel': {
     username: 'your-ssh-username',
     host: 'remote-mysql-client',
     dstHost: 'remote-mysql-server'
-  }
+  },
+  pipeline: ..
 }
 ```
 
