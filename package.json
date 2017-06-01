@@ -20,7 +20,7 @@
   "dependencies": {
     "bluebird": "~3.5.0",
     "ember-cli-deploy-plugin": "^0.2.9",
-    "knex": "~0.12.9"
+    "knex": ">= 0.12.9 < 0.14"
   },
   "devDependencies": {
     "chai": "^3.5.0",
