@@ -7,9 +7,6 @@ const rewire = require('rewire');
 const subject = rewire('../../lib/deploy-client');
 
 describe('DeployClient private methods', function() {
-  const rewire = require('rewire');
-  const subject = rewire('../../lib/deploy-client');
-
   const knex = require('knex')({
     client: 'sqlite3',
     connection: { filename: ':memory:' },
@@ -17,8 +14,17 @@ describe('DeployClient private methods', function() {
     //debug: true
   });
 
-  beforeEach(subject.__get__('createTable').bind({ knex }, 'test'));
-  afterEach(() => knex.schema.dropTable('test'));
+  beforeEach(() => {
+    global.TABLE_NAME = 'test';
+
+    return knex.migrate.latest();
+  });
+
+  afterEach(() => {
+    global.TABLE_NAME = 'test';
+
+    return knex.migrate.rollback();
+  });
 
   // Tear down the connection pool after all the tests have completed.
   after(() => knex.destroy());
@@ -322,8 +328,6 @@ describe('DeployClient public API', function() {
     allowOverwrite: false
   };
 
-  const createTable = subject.__get__('createTable');
-
   let deployClient;
 
   afterEach(() => {
@@ -379,7 +383,7 @@ describe('DeployClient public API', function() {
     it('returns successfully', function() {
       deployClient = new subject(baseOptions);
 
-      return createTable.call(deployClient, 'foo')
+      return deployClient.sanityCheck({ tableName: 'foo' })
         .then(() => deployClient.fetchRevisions({ tableName: 'foo' }));
     });
   });
@@ -388,7 +392,7 @@ describe('DeployClient public API', function() {
     it('returns the active revision key', function() {
       deployClient = new subject(baseOptions);
 
-      return createTable.call(deployClient, 'foo')
+      return deployClient.sanityCheck({ tableName: 'foo' })
         .then(() => deployClient.knex('foo').insert([
           { key: 'first', value: 'foo', is_active: false },
           { key: 'second', value: 'bar', is_active: true },
@@ -403,7 +407,7 @@ describe('DeployClient public API', function() {
     it('returns null if no revision keys are active', function() {
       deployClient = new subject(baseOptions);
 
-      return createTable.call(deployClient, 'foo')
+      return deployClient.sanityCheck({ tableName: 'foo' })
         .then(() => deployClient.knex('foo').insert({ key: 'foo', value: 'bar' }))
         .then(() => deployClient.activeRevisionKey({ tableName: 'foo' }))
         .then(key => {
@@ -416,7 +420,7 @@ describe('DeployClient public API', function() {
     it('activates a valid revision', function() {
       deployClient = new subject(baseOptions);
 
-      return createTable.call(deployClient, 'foo')
+      return deployClient.sanityCheck({ tableName: 'foo' })
         .then(() => deployClient.knex('foo').insert({ key: 'foo', value: 'bar' }))
         .then(() => deployClient.activateRevision({ tableName: 'foo', revisionKey: 'foo' }))
         .then(() => deployClient.knex('foo').select('key').where('is_active', true))
@@ -434,7 +438,7 @@ describe('DeployClient public API', function() {
     it('will not activate an invalid revision', function() {
       deployClient = new subject(baseOptions);
 
-      return createTable.call(deployClient, 'foo')
+      return deployClient.sanityCheck({ tableName: 'foo' })
         .then(() => {
           let promise = deployClient.activateRevision({ tableName: 'foo', revisionKey: 'foo' });
 
@@ -484,7 +488,7 @@ describe('DeployClient public API', function() {
         { key: 'third', value: 'qux', created_at: 3 }
       ];
 
-      return createTable.call(deployClient, 'foo')
+      return deployClient.sanityCheck({ tableName: 'foo' })
         .then(() => deployClient.knex('foo').insert(revisionList))
         .then(() => deployClient.upload({ tableName: 'foo', revisionKey: 'fourth', value: 'wat' }))
         .then(() => deployClient.knex('foo').select('key', 'value').orderBy('created_at'))
