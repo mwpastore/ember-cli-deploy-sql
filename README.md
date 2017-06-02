@@ -8,7 +8,7 @@
 This plugin, lovingly cribbed from [ember-cli-deploy-redis][8], uploads the
 contents of a file, presumably index.html, to a specified database table.
 PostgreSQL, MySQL/MariaDB, Oracle, and other relational database management
-systems (RDBMS) are supported.
+systems (RDBMS) are supported (courtesy of [Knex.js][3]).
 
 More often than not this plugin will be used in conjunction with the [lightning
 method of deployment][1] where the Ember.js application assets will be served
@@ -128,7 +128,7 @@ the [Plugin Documentation][2].
 
 ### sqlOptions
 
-These options are assembled and passed to [Knex.js][3]. Knex is used as a
+These four options are assembled and passed to [Knex.js][3]. Knex is used as a
 query builder and database abstraction layer (DAL). Please see [its
 documentation][11] for more information on these options. N.B.:
 
