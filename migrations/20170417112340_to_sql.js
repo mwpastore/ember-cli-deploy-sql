@@ -2,6 +2,7 @@
 'use strict';
 
 exports.up = function(knex, Bluebird) {
+  // https://github.com/tgriesser/knex/issues/2014
   //const tableName = this.config.emberCliDeploy.tableName;
   const tableName = global.TABLE_NAME;
 
