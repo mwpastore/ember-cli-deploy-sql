@@ -1,9 +1,9 @@
-/*global Promise*/
 /*eslint-env node*/
 'use strict';
 
 const subject = require('../../index');
 const assert = require('../helpers/assert');
+const Bluebird = require('bluebird');
 
 describe('DeployPlugin | fetchInitialRevisions hook', function() {
   const mockUi = {
@@ -28,7 +28,7 @@ describe('DeployPlugin | fetchInitialRevisions hook', function() {
           client: 'mock',
           deployClient: () => ({
             fetchRevisions() {
-              return Promise.resolve([
+              return Bluebird.resolve([
                 {
                   revision: 'a',
                   active: false

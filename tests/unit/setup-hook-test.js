@@ -1,9 +1,9 @@
-/*global Promise*/
 /*eslint-env node*/
 'use strict';
 
 const subject = require('../../index');
 const assert = require('../helpers/assert');
+const Bluebird = require('bluebird');
 
 describe('DeployPlugin | setup hook', function() {
   const mockUi = {
@@ -24,7 +24,7 @@ describe('DeployPlugin | setup hook', function() {
 
       sanityCheckCalled = true;
 
-      return Promise.resolve(tableName);
+      return Bluebird.resolve(tableName);
     }
   });
 

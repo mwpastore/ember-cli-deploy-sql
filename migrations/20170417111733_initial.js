@@ -1,7 +1,7 @@
 /*eslint-env node*/
 'use strict';
 
-exports.up = function(knex, Promise) {
+exports.up = function(knex, Bluebird) {
   //const tableName = this.config.emberCliDeploy.tableName;
   const tableName = global.TABLE_NAME;
 
@@ -9,7 +9,7 @@ exports.up = function(knex, Promise) {
     // Backwards compatibility with ember-cli-deploy-mysql and -postgres, which
     // implemented a static table creation.
     if (exists) {
-      return Promise.resolve();
+      return Bluebird.resolve();
     }
 
     return knex.schema.createTable(tableName, (tbl) => {

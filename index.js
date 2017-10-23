@@ -4,19 +4,19 @@
 const
   DeployClient = require('./lib/deploy-client'),
   DeployPluginBase = require('ember-cli-deploy-plugin'),
-  Promise = require('bluebird'); // Knex uses Bluebird, so we will too.
+  Bluebird = require('bluebird'); // Knex uses Bluebird, so we will too.
 
 //
 // Private functions
 //
 const
   joinPath = require('path').join,
-  readFile = Promise.promisify(require('fs').readFile);
+  readFile = Bluebird.promisify(require('fs').readFile);
 
 function errorMessage(error) {
   this.log(error, { color: 'red' });
 
-  return Promise.reject(error);
+  return Bluebird.reject(error);
 }
 
 //

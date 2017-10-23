@@ -1,9 +1,9 @@
-/*global Promise*/
 /*eslint-env node*/
 'use strict';
 
 const subject = require('../../index');
 const assert = require('../helpers/assert');
+const Bluebird = require('bluebird');
 
 describe('DeployPlugin | activate hook', function() {
   const mockUi = {
@@ -32,7 +32,7 @@ describe('DeployPlugin | activate hook', function() {
             activateRevision() {
               didActivate = true;
 
-              return Promise.resolve({
+              return Bluebird.resolve({
                 revisionKey: '123abc'
               });
             }
@@ -66,7 +66,7 @@ describe('DeployPlugin | activate hook', function() {
           client: 'mock',
           deployClient: () => ({
             activateRevision() {
-              return Promise.reject('some-error');
+              return Bluebird.reject('some-error');
             }
           }),
           revisionKey: '123abc',

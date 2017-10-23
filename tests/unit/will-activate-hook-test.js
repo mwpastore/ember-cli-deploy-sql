@@ -1,9 +1,9 @@
-/*global Promise*/
 /*eslint-env node*/
 'use strict';
 
 const subject = require('../../index');
 const assert = require('../helpers/assert');
+const Bluebird = require('bluebird');
 
 describe('DeployPlugin | willActivate hook', function() {
   const mockUi = {
@@ -28,7 +28,7 @@ describe('DeployPlugin | willActivate hook', function() {
           client: 'mock',
           deployClient: () => ({
             activeRevisionKey() {
-              return Promise.resolve('123abc');
+              return Bluebird.resolve('123abc');
             }
           }),
           tableName: 'foo'
@@ -58,7 +58,7 @@ describe('DeployPlugin | willActivate hook', function() {
           client: 'mock',
           deployClient: () => ({
             activeRevisionKey() {
-              return Promise.reject('some-error');
+              return Bluebird.reject('some-error');
             }
           }),
           tableName: 'foo'

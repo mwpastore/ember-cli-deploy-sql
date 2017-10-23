@@ -1,7 +1,7 @@
 /*eslint-env node*/
 'use strict';
 
-exports.up = function(knex, Promise) {
+exports.up = function(knex, Bluebird) {
   //const tableName = this.config.emberCliDeploy.tableName;
   const tableName = global.TABLE_NAME;
 
@@ -9,7 +9,7 @@ exports.up = function(knex, Promise) {
     // Backwards compatibility with earlier versions of ember-cli-deploy-sql,
     // which required a manual migration.
     if (exists) {
-      return Promise.resolve();
+      return Bluebird.resolve();
     }
 
     return knex.schema.alterTable(tableName, (tbl) => {

@@ -1,9 +1,9 @@
-/*global Promise*/
 /*eslint-env node*/
 'use strict';
 
 const subject = require('../../index');
 const assert = require('../helpers/assert');
+const Bluebird = require('bluebird');
 
 describe('DeployPlugin | upload hook', function() {
   const mockUi = {
@@ -27,7 +27,7 @@ describe('DeployPlugin | upload hook', function() {
 
       capturedValue = value;
 
-      return Promise.resolve({
+      return Bluebird.resolve({
         tableName,
         revisionKey
       });
