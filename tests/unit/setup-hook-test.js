@@ -49,7 +49,7 @@ describe('DeployPlugin | setup hook', function() {
     instance.configure(context);
 
     return instance.setup(context)
-      .then(result => {
+      .then((result) => {
         assert.ok(sanityCheckCalled);
         assert.equal(result, 'foo');
       });

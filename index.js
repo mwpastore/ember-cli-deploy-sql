@@ -67,7 +67,7 @@ const DeployPlugin = DeployPluginBase.extend({
       });
     },
 
-    didDeployMessage: context => {
+    didDeployMessage: (context) => {
       // TODO: replace this statement and lets with destructured context
       context.revisionData = context.revisionData || {};
 
@@ -90,7 +90,7 @@ const DeployPlugin = DeployPluginBase.extend({
 
     migrations: {},
 
-    revisionKey: context => {
+    revisionKey: (context) => {
       // TODO: replace these statements and lets with destructured context
       context.commandOptions = context.commandOptions || {};
       context.revisionData = context.revisionData || {};
@@ -147,7 +147,7 @@ const DeployPlugin = DeployPluginBase.extend({
 
     return readFile(filePath, 'utf8')
       .then(value => deployClient.upload({ tableName, revisionKey, value }))
-      .then(args => {
+      .then((args) => {
         // TODO: replace lets with destructured args
         let
           tableName = args.tableName,
@@ -179,7 +179,7 @@ const DeployPlugin = DeployPluginBase.extend({
     this.log(`Activating revision \`${revisionKey}'`, { verbose: true });
 
     return deployClient.activateRevision({ tableName, revisionKey })
-      .then(args => {
+      .then((args) => {
         // TODO: replace let with destructured args
         let revisionKey = args.revisionKey;
 

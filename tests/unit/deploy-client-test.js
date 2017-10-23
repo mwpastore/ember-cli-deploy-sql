@@ -33,7 +33,7 @@ describe('DeployClient private methods', function() {
     it('sets appropriate column defaults', function() {
       return knex('test').insert({ key: 'foo', value: 'bar' })
         .then(() => knex('test').first())
-        .then(row => {
+        .then((row) => {
           assert.isObject(row);
           assert.propertyVal(row, 'key', 'foo');
           assert.propertyVal(row, 'value', 'bar');
@@ -56,7 +56,7 @@ describe('DeployClient private methods', function() {
     it('creates a revision if none exists', function() {
       return createRevision.call({ knex }, 'test', 'foo', 'bar')
         .then(() => knex('test').select('key', 'value'))
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 1);
 
@@ -81,7 +81,7 @@ describe('DeployClient private methods', function() {
       return knex('test').insert({ key: 'foo', value: 'bar' })
         .then(() => createRevision.call({ knex, allowOverwrite: true }, 'test', 'foo', 'qux'))
         .then(() => knex('test').select('key', 'value'))
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 1);
 
@@ -99,7 +99,7 @@ describe('DeployClient private methods', function() {
 
     it('resolves to an empty array if none', function() {
       return listRevisions.call({ knex }, 'test')
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 0);
         });
@@ -110,7 +110,7 @@ describe('DeployClient private methods', function() {
         { key: 'first', value: 'foo', created_at: 1 },
         { key: 'second', value: 'bar', created_at: 2 }
       ]).then(() => listRevisions.call({ knex }, 'test'))
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 2);
 
@@ -140,7 +140,7 @@ describe('DeployClient private methods', function() {
         description: 'this is a test',
         is_active: true
       }).then(() => listRevisions.call({ knex }, 'test'))
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 1);
 
@@ -174,7 +174,7 @@ describe('DeployClient private methods', function() {
       return knex('test').insert(revisionList)
         .then(() => trimRevisions.call({ knex, maxRecentUploads: 2 }, 'test', revisionKeys))
         .then(() => knex('test').select('key').orderBy('created_at'))
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 2);
 
@@ -204,7 +204,7 @@ describe('DeployClient private methods', function() {
       return knex('test').insert(revisionList)
         .then(() => trimRevisions.call({ knex, maxRecentUploads: 2 }, 'test', revisionKeys))
         .then(() => knex('test').select('key').orderBy('created_at'))
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 3);
         });
@@ -224,7 +224,7 @@ describe('DeployClient private methods', function() {
       return knex('test').insert(revisionList)
         .then(() => trimRevisions.call({ knex, maxRecentUploads: 3 }, 'test', revisionKeys))
         .then(() => knex('test').select('key').orderBy('created_at'))
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 3);
         });
@@ -286,7 +286,7 @@ describe('DeployClient private methods', function() {
       return knex('test').insert(revisionList)
         .then(() => activateRevision.call({ knex }, 'test', 'third'))
         .then(() => hashify('key', knex('test').select('key', 'is_active')))
-        .then(lookup => {
+        .then((lookup) => {
           assert.isNotOk(lookup.first.is_active);
           assert.isNotOk(lookup.second.is_active);
           assert.isOk(lookup.third.is_active);
@@ -343,7 +343,7 @@ describe('DeployClient public API', function() {
 
       return deployClient.sanityCheck({ tableName: 'foo' })
         .then(() => deployClient.knex('foo').columnInfo())
-        .then(info => {
+        .then((info) => {
           assert.isObject(info);
 
           assert.deepPropertyVal(info, 'id.type', 'integer');
@@ -357,14 +357,14 @@ describe('DeployClient public API', function() {
     it('does not create a table if one exists', function() {
       deployClient = new subject(baseOptions);
 
-      return deployClient.knex.schema.createTable('bar', tbl => {
+      return deployClient.knex.schema.createTable('bar', (tbl) => {
         tbl.increments();
         tbl.string('key').notNullable().unique();
         tbl.boolean('is_active').notNullable().default(false);
         tbl.timestamps();
       }).then(() => deployClient.sanityCheck({ tableName: 'bar' }))
         .then(() => deployClient.knex('bar').columnInfo())
-        .then(info => {
+        .then((info) => {
           assert.isObject(info);
 
           assert.deepPropertyVal(info, 'id.type', 'integer');
@@ -399,7 +399,7 @@ describe('DeployClient public API', function() {
           { key: 'third', value: 'qux', is_active: false }
         ]))
         .then(() => deployClient.activeRevisionKey({ tableName: 'foo' }))
-        .then(key => {
+        .then((key) => {
           assert.strictEqual(key, 'second');
         });
     });
@@ -410,7 +410,7 @@ describe('DeployClient public API', function() {
       return deployClient.sanityCheck({ tableName: 'foo' })
         .then(() => deployClient.knex('foo').insert({ key: 'foo', value: 'bar' }))
         .then(() => deployClient.activeRevisionKey({ tableName: 'foo' }))
-        .then(key => {
+        .then((key) => {
           assert.isNull(key);
         });
     });
@@ -424,7 +424,7 @@ describe('DeployClient public API', function() {
         .then(() => deployClient.knex('foo').insert({ key: 'foo', value: 'bar' }))
         .then(() => deployClient.activateRevision({ tableName: 'foo', revisionKey: 'foo' }))
         .then(() => deployClient.knex('foo').select('key').where('is_active', true))
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 1);
 
@@ -454,7 +454,7 @@ describe('DeployClient public API', function() {
       return deployClient.sanityCheck({ tableName: 'foo' })
         .then(() => deployClient.upload({ tableName: 'foo', value: 'bar' }))
         .then(() => deployClient.knex('foo').select('key', 'value'))
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 1);
 
@@ -471,7 +471,7 @@ describe('DeployClient public API', function() {
 
       return deployClient.sanityCheck({ tableName: 'foo' })
         .then(() => deployClient.upload({ tableName: 'foo', value: 'bar' }))
-        .then(result => {
+        .then((result) => {
           assert.propertyVal(result, 'tableName', 'foo');
           assert.propertyVal(result, 'revisionKey', 'default');
         });
@@ -492,7 +492,7 @@ describe('DeployClient public API', function() {
         .then(() => deployClient.knex('foo').insert(revisionList))
         .then(() => deployClient.upload({ tableName: 'foo', revisionKey: 'fourth', value: 'wat' }))
         .then(() => deployClient.knex('foo').select('key', 'value').orderBy('created_at'))
-        .then(revisions => {
+        .then((revisions) => {
           assert.isArray(revisions);
           assert.lengthOf(revisions, 2);
 

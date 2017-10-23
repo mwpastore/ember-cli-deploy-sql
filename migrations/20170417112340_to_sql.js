@@ -5,14 +5,14 @@ exports.up = function(knex, Promise) {
   //const tableName = this.config.emberCliDeploy.tableName;
   const tableName = global.TABLE_NAME;
 
-  return knex.schema.hasColumn(tableName, 'is_active').then(exists => {
+  return knex.schema.hasColumn(tableName, 'is_active').then((exists) => {
     // Backwards compatibility with earlier versions of ember-cli-deploy-sql,
     // which required a manual migration.
     if (exists) {
       return Promise.resolve();
     }
 
-    return knex.schema.alterTable(tableName, tbl => {
+    return knex.schema.alterTable(tableName, (tbl) => {
       tbl.string('description').after('deployer');
       tbl.boolean('is_active').after('description').notNullable().defaultTo(false).index();
     }).then(() =>
@@ -36,7 +36,7 @@ exports.down = function(knex) {
     .where('is_active', true)
     .reduce((_, key) => key, null)
     .then(current => current && knex(tableName).insert({ key: 'current', value: current }))
-    .then(() => knex.schema.alterTable(tableName, tbl => {
+    .then(() => knex.schema.alterTable(tableName, (tbl) => {
       tbl.dropColumn('description');
       tbl.dropColumn('is_active');
     }));

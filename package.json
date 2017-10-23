@@ -27,7 +27,7 @@
     "chai-as-promised": "^6.0.0",
     "coveralls": "~2.13.0",
     "ember-cli": "~2.13.0-beta.3",
-    "eslint": "^3.18.0",
+    "eslint": "^4.9",
     "glob": "^7.1.1",
     "istanbul": "~0.4.5",
     "mocha": "^3.2.0",

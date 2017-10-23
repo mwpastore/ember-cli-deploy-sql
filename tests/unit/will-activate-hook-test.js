@@ -40,7 +40,7 @@ describe('DeployPlugin | willActivate hook', function() {
     instance.configure(context);
 
     return instance.willActivate(context)
-      .then(result => {
+      .then((result) => {
         assert.deepPropertyVal(result, 'revisionData.previousRevisionKey', '123abc');
       });
   });

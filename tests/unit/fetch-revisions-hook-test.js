@@ -45,7 +45,7 @@ describe('DeployPlugin | fetchRevisions hook', function() {
     instance.configure(context);
 
     return instance.fetchRevisions(context)
-      .then(results => {
+      .then((results) => {
         assert.deepEqual(results, {
           revisions: [
             {

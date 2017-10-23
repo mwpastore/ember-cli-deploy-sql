@@ -56,7 +56,7 @@ describe('DeployPlugin | upload hook', function() {
     instance.configure(context);
 
     return instance.upload(context)
-      .then(result => {
+      .then((result) => {
         assert.propertyVal(result, 'tableName', 'foo');
         assert.propertyVal(result, 'revisionKey', '123abc');
 

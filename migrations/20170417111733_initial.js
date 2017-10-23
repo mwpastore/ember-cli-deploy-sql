@@ -5,14 +5,14 @@ exports.up = function(knex, Promise) {
   //const tableName = this.config.emberCliDeploy.tableName;
   const tableName = global.TABLE_NAME;
 
-  return knex.schema.hasTable(tableName).then(exists => {
+  return knex.schema.hasTable(tableName).then((exists) => {
     // Backwards compatibility with ember-cli-deploy-mysql and -postgres, which
     // implemented a static table creation.
     if (exists) {
       return Promise.resolve();
     }
 
-    return knex.schema.createTable(tableName, tbl => {
+    return knex.schema.createTable(tableName, (tbl) => {
       tbl.increments();
       tbl.string('key').notNullable().unique();
       tbl.text('value').notNullable();

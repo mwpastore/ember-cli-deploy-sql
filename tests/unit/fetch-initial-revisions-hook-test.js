@@ -45,7 +45,7 @@ describe('DeployPlugin | fetchInitialRevisions hook', function() {
     instance.configure(context);
 
     return instance.fetchInitialRevisions(context)
-      .then(results => {
+      .then((results) => {
         assert.deepEqual(results, {
           initialRevisions: [
             {

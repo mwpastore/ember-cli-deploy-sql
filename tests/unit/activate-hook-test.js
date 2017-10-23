@@ -46,7 +46,7 @@ describe('DeployPlugin | activate hook', function() {
     instance.configure(context);
 
     return instance.activate(context)
-      .then(result => {
+      .then((result) => {
         assert.deepPropertyVal(result, 'revisionData.activatedRevisionKey', '123abc');
 
         assert.ok(didActivate);
