@@ -346,11 +346,11 @@ describe('DeployClient public API', function() {
         .then((info) => {
           assert.isObject(info);
 
-          assert.deepPropertyVal(info, 'id.type', 'integer');
-          assert.deepPropertyVal(info, 'key.type', 'varchar');
-          assert.deepPropertyVal(info, 'value.type', 'text');
-          assert.deepPropertyVal(info, 'is_active.type', 'boolean');
-          assert.deepPropertyVal(info, 'created_at.type', 'datetime');
+          assert.nestedPropertyVal(info, 'id.type', 'integer');
+          assert.nestedPropertyVal(info, 'key.type', 'varchar');
+          assert.nestedPropertyVal(info, 'value.type', 'text');
+          assert.nestedPropertyVal(info, 'is_active.type', 'boolean');
+          assert.nestedPropertyVal(info, 'created_at.type', 'datetime');
         });
     });
 
@@ -367,11 +367,11 @@ describe('DeployClient public API', function() {
         .then((info) => {
           assert.isObject(info);
 
-          assert.deepPropertyVal(info, 'id.type', 'integer');
-          assert.deepPropertyVal(info, 'key.type', 'varchar');
-          assert.deepPropertyVal(info, 'is_active.type', 'boolean');
-          assert.deepPropertyVal(info, 'created_at.type', 'datetime');
-          assert.deepPropertyVal(info, 'updated_at.type', 'datetime');
+          assert.nestedPropertyVal(info, 'id.type', 'integer');
+          assert.nestedPropertyVal(info, 'key.type', 'varchar');
+          assert.nestedPropertyVal(info, 'is_active.type', 'boolean');
+          assert.nestedPropertyVal(info, 'created_at.type', 'datetime');
+          assert.nestedPropertyVal(info, 'updated_at.type', 'datetime');
 
           assert.notProperty(info, 'value');
           assert.notProperty(info, 'description');

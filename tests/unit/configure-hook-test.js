@@ -137,8 +137,8 @@ describe('DeployPlugin | configure hook', function() {
       const deployClient = instance.readConfig('deployClient');
 
       assert.isObject(deployClient);
-      assert.deepPropertyVal(deployClient, 'knex.client.connectionSettings.host', 'localhost');
-      assert.deepPropertyVal(deployClient, 'knex.client.connectionSettings.port', 12345);
+      assert.nestedPropertyVal(deployClient, 'knex.client.connectionSettings.host', 'localhost');
+      assert.nestedPropertyVal(deployClient, 'knex.client.connectionSettings.port', 12345);
 
       instance.teardown(context);
     });
@@ -173,8 +173,8 @@ describe('DeployPlugin | configure hook', function() {
       const deployClient = instance.readConfig('deployClient');
 
       assert.isObject(deployClient);
-      assert.deepPropertyVal(deployClient, 'knex.client.connectionSettings.host', 'example.com');
-      assert.deepPropertyVal(deployClient, 'knex.client.connectionSettings.port', 67890);
+      assert.nestedPropertyVal(deployClient, 'knex.client.connectionSettings.host', 'example.com');
+      assert.nestedPropertyVal(deployClient, 'knex.client.connectionSettings.port', 67890);
 
       instance.teardown(context);
     });
@@ -208,8 +208,8 @@ describe('DeployPlugin | configure hook', function() {
       const deployClient = instance.readConfig('deployClient');
 
       assert.isObject(deployClient);
-      assert.notDeepProperty(deployClient, 'knex.client.connectionSettings.host');
-      assert.notDeepProperty(deployClient, 'knex.client.connectionSettings.port');
+      assert.notNestedProperty(deployClient, 'knex.client.connectionSettings.host');
+      assert.notNestedProperty(deployClient, 'knex.client.connectionSettings.port');
 
       instance.teardown(context);
     });

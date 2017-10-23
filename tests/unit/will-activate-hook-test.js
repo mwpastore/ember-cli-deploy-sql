@@ -41,7 +41,7 @@ describe('DeployPlugin | willActivate hook', function() {
 
     return instance.willActivate(context)
       .then((result) => {
-        assert.deepPropertyVal(result, 'revisionData.previousRevisionKey', '123abc');
+        assert.nestedPropertyVal(result, 'revisionData.previousRevisionKey', '123abc');
       });
   });
 
