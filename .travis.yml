@@ -22,7 +22,7 @@ script:
 
 after_success:
   - |
-    if [[ $TRAVIS_NODE_VERSION = "node" ]] ; then
+    if [[ "$TRAVIS_NODE_VERSION" = "4" ]] ; then
       echo "Pushing to Coveralls..." >&2
       yarn coveralls
     else
