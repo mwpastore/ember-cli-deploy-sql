@@ -397,9 +397,11 @@ ENV = {
 
 1. Update your backend to serve the revision `` WHERE `is_active` = 1 ``
    (instead of the revision pointed to by the `'current'` revision).
+   
+1. Run `ember deploy <environment>` to run the migrations that create the bootstrap table
+   and insert your first deployment.
 
-1. Run `ember deploy:list <environment>` to migrate the database and confirm
-   that the correct revision is (still) active.
+1. Run `ember deploy:list <environment>` to confirm that the correct revision is (still) active.
 
 ## Migrating from ember-cli-deploy-postgres
 
