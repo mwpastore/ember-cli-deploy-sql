@@ -169,6 +169,8 @@ The table looks something like this (e.g. in MySQL):
 
 *Default:* `${projectName}_bootstrap`
 
+N.B.: `gitsha`, `deployer`, and `description` are reserved for future use.
+
 ### allowOverwrite
 
 A flag to specify whether the revision should be overwritten if it already
@@ -242,7 +244,7 @@ A user can activate a revision by either:
 ### What does activation do?
 
 When *ember-cli-deploy-sql* uploads a file, it uploads it to the table defined
-by the `tableName` config property (which may be derived from the project name,
+by the `tableName` config property (which may be derived from the project name),
 with a key defined by the `revisionKey` config property (which may be derived
 from the file contents). So if there have been three revisons deployed (but
 not activated), the table might look something like this:
