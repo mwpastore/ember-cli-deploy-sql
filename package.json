@@ -18,6 +18,7 @@
   "author": "Mike Pastore <mike@oobak.org>",
   "license": "MIT",
   "dependencies": {
+    "core-object": "^3.1.5",
     "bluebird": "~3.5.0",
     "ember-cli-deploy-plugin": "^0.2.9",
     "knex": ">= 0.12.9 < 0.14"
